@@ -54,7 +54,7 @@ void DFS (int depth, int k, int x, int y)
 
         if(InRange(nx, ny, n)&&visited1[nx][ny] == false)//영역안에 있으면서 안갔다왔으면,
         {
-            if(mmap[nx][ny] == 1 && (!visited1[nx][ny]))
+            if(mmap[nx][ny] == 1)
             {
                 total++;
                 visited1[nx][ny] = true;
@@ -83,12 +83,7 @@ int main() {
     mmap = v1;
     vector<vector<bool>> visited(n, vector<bool>(n, false));//방문 여부
     //최대 반복할 k찾기
-    int max_k = 0;
-    while((max_k * max_k + (max_k+1) * (max_k+1)) < (n*n))
-    {
-        max_k++;
-    }
-    max_k++; //한번더
+    int max_k = n;
     int ganswer = 0;
     for(int x=0;x<n;x++)
     {
