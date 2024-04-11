@@ -27,12 +27,12 @@ int main() {
                 positive.push_back({i,j});
         }
     }
-    // for(int i=0;i<positive.size();i++)
-    // {    
-    //     cout<<positive[i].first<<' ';
-    //     cout<<positive[i].second<<'\n';
-    // }
-
+    if(positive.size()==0)
+    {
+        cout<<-1;
+        return 0;
+    }
+        
     int answer = 1;
     //저장된 양수 좌표 중 두개 고르기 
     for(int i=0;i<positive.size();i++)//x번
@@ -61,11 +61,11 @@ int main() {
                     {
                         if(mmap[x][y] < 0) //음수 일때,
                         {
-                        //cout<<x<<' '<<y<<' '<<mmap[x][y]<<'\n';
-                        sq = false;
-                        break;
+                            sq = false;
+                            break;
                         }       
                     }
+
                     else
                     {
                         sq = false;
@@ -77,8 +77,7 @@ int main() {
                 if(!sq)
                     break;
             }
-            // cout<<sq<<' '<<x1<<' '<<y1<<'\n';
-            // cout<<sq<<' '<<x2<<' '<<y2<<"\n\n";
+           
             if(sq)
             {
                 int answer2 = answer;
