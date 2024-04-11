@@ -52,7 +52,7 @@ void DFS (int depth, int k, int x, int y)
         int nx = x+dx[i];
         int ny = y+dy[i];
 
-        if(InRange(nx, ny, n))//영역안에 있으면서 안갔다왔으면,
+        if(InRange(nx, ny, n)&&visited1[nx][ny] == false)//영역안에 있으면서 안갔다왔으면,
         {
             if(mmap[nx][ny] == 1 && (!visited1[nx][ny]))
             {
@@ -80,20 +80,16 @@ int main() {
             v1[i][j] = num;
         }
     }
-
     mmap = v1;
     vector<vector<bool>> visited(n, vector<bool>(n, false));//방문 여부
-
     //최대 반복할 k찾기
     int max_k = 0;
-    while((max_k * max_k + (max_k+1) * (max_k+1)) < n*n)
+    while((max_k * max_k + (max_k+1) * (max_k+1)) < (n*n))
     {
         max_k++;
-
     }
     max_k++; //한번더
     int ganswer = 0;
-    int answer = 0;
     for(int x=0;x<n;x++)
     {
         for(int y=0;y<n;y++)
@@ -110,11 +106,9 @@ int main() {
                 DFS(0, i,x,y);
                 int cost = i * i + (i+1) * (i+1);
                 int income = m * total - cost;//수익
-
                 if(income >= 0)
                 {
                     ganswer = max(ganswer, total);//최대 금 채굴
-
                 }
             }
         }
