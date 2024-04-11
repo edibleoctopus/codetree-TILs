@@ -45,12 +45,12 @@ int main() {
     for(int i=0;i<n;i++)
     {
         for(int j=0;j<n;j++)
-        {   
-            bool possible = true;
-            for(int k1=1;k1<max_k;k1++)
+        {        
+            for(int k1=1;k1<max_k;k1++)//
             {
-                for(int k2=1;k2<max_k;k2++)
+                for(int k2=1;k2<max_k;k2++)//
                 {
+                    bool possible = true;
                     int total = 0;
                     int x = i,  y = j;
                     for(int d=0;d<4;d++)//1, 2, 3, 4 과정
@@ -61,7 +61,7 @@ int main() {
                         else 
                             k = k2;//2, 4 과정
 
-                    for(int z = 0;z<k;z++)
+                    for(int z = 0;z<k;z++)//해당 과정만큼 반복
                     {
                         int nx = x+dx[d], ny = y+dy[d]; 
                         if(InRange(nx, ny,n))
@@ -70,15 +70,16 @@ int main() {
                             x = nx, y=ny;
                         }
                         else
-                        possible=false;
+                            possible=false;
 
                         if(!possible)
                                 break;
                     }    
                         if(!possible)
                                 break;
-                    }    
-                    answer = max(total, answer);    
+                    }
+                    if(possible)    
+                        answer = max(total, answer);    
                 }
             }        
         }
