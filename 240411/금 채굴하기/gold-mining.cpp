@@ -83,7 +83,12 @@ int main() {
     mmap = v1;
     vector<vector<bool>> visited(n, vector<bool>(n, false));//방문 여부
     //최대 반복할 k찾기
-    int max_k = n;
+    int max_k = 0;
+    while((max_k * max_k + (max_k+1) * (max_k+1)) < (n*n))
+    {
+        max_k++;
+    }
+    //max_k++; //한번더
     int ganswer = 0;
     for(int x=0;x<n;x++)
     {
