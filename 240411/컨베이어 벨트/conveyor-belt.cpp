@@ -41,15 +41,17 @@ int main() {
     }
 
     //값 밀기
-    int temp1 = v1[2*n-1];
 
-    for(int i=2*n-1;i>=1;i--)
+    for(int tt=0;tt<t;tt++)
     {
-        v1[i] = v1[i-1];           
+        int temp1 = v1[2*n-1];
+        for(int i=2*n-1;i>=1;i--)
+        {
+            v1[i] = v1[i-1];           
+        }
+        v1[0] = temp1;
     }
-
-    v1[0] = temp1;
-
+    
     for(int i=0;i<2*n;i++)
     {    
         cout<<v1[i]<<' ';
