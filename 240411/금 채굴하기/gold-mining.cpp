@@ -21,32 +21,26 @@ k=0일 때 그 지점 하나만 채굴
 */
 
 int n, m;
+int total = 0;//얻은 금 개수
 
 bool InRange(int x, int y, int n)
 {
     return(x>=0 && y>=0 && x<n && y<n);
 }
 
-vector<vector<bool>> visited1;//방문 여부
 vector<vector<int>> mmap(n,vector<int>(n,0)); //map 정보
 
 //중앙에서 시작하기
 
 int dx[] = {0,1,0,-1};//동 남 서 북 순서
-int dy[] = {1,0,0,-1};
-int answer = 0; //최대 가격
-int ganswer = 0;
-void DFS (int depth, int k, int total, int x, int y)
+int dy[] = {1,0,-1,0};
+
+vector<vector<bool>> visited1;//방문 여부
+void DFS (int depth, int k, int x, int y)
 {
-    if(depth == k*4)
+    if(depth == k)
     {
         //얻은 금 가격 비교하기
-        int cost = k * k + (k+1) * (k+1);
-        int income = m*total - cost;//수익
-        int answer2 = answer;
-        answer = max(answer, income);//최대 수익
-        if(answer != answer2)//유지시
-            ganswer = total;
         return;
     }
 
@@ -54,22 +48,21 @@ void DFS (int depth, int k, int total, int x, int y)
     for(int i=0;i<4;i++)
     {
         //상하좌우 이동
+        //cout<<"k : "<<k<<"depth : "<<depth<<" 현재 좌표 : "<<x<<' '<<y<<'\n'; 
         int nx = x+dx[i];
         int ny = y+dy[i];
 
-        if(InRange(nx, ny, n) && (!visited1[nx][ny]))//영역안에 있으면서 안갔다왔으면,
+        if(InRange(nx, ny, n))//영역안에 있으면서 안갔다왔으면,
         {
-            visited1[nx][ny] = true;
-            if(mmap[nx][ny] == 1)
+            if(mmap[nx][ny] == 1 && (!visited1[nx][ny]))
             {
                 total++;
+                visited1[nx][ny] = true;
             }      
-            x = nx, y = ny;
-            DFS(depth+1, k, total,x,y);
+            DFS(depth+1, k, nx, ny);
         }
     }
-    //갈 수 있는지 여부 확인 & 갔다왔는지 여부 확인  
-       
+    //갈 수 있는지 여부 확인 & 갔다왔는지 여부 확인      
 }
 
 int main() {
@@ -90,32 +83,42 @@ int main() {
 
     mmap = v1;
     vector<vector<bool>> visited(n, vector<bool>(n, false));//방문 여부
-    visited1 = visited;
 
     //최대 반복할 k찾기
     int max_k = 0;
     while((max_k * max_k + (max_k+1) * (max_k+1)) < n*n)
     {
         max_k++;
+
     }
     max_k++; //한번더
-
-    //중앙에서 시작
-    int x = n/2;
-    int y = n/2;
-
-    int total = 0;//얻은 금 개수
-    if(v1[x][y]==1)
+    int ganswer = 0;
+    int answer = 0;
+    for(int x=0;x<n;x++)
     {
-        total++;
-    }
+        for(int y=0;y<n;y++)
+        {
+            for (int i=0;i<=max_k;i++)
+            {
+                visited1 = visited;
+                visited1[x][y] = true;
+                total = 0;
+                if(v1[x][y]==1)
+                {
+                    total++;
+                }
+                DFS(0, i,x,y);
+                int cost = i * i + (i+1) * (i+1);
+                int income = m * total - cost;//수익
 
-    for (int i=0;i<=max_k;i++)
-    {
-        DFS(0, i, total,x,y);
+                if(income >= 0)
+                {
+                    ganswer = max(ganswer, total);//최대 금 채굴
+
+                }
+            }
+        }
     }
-    
     cout<<ganswer;
-
     return 0;
 }
