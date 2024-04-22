@@ -144,7 +144,7 @@ int main() {
         c = checker(max_val).second;
         if(r==-1 && c==-1)
         {
-            cout<<rp<<' '<<cp;
+            cout<<rp+1<<' '<<cp+1;
             return 0;
         }
         poss = false;
