@@ -71,7 +71,7 @@ int main() {
     {
         //돌 좌표(rock 중에) k개만큼 뽑고 맵에서 제거하기(조합)
         vector<vector<int>> temp = mmap;
-        visited.assign(n, vector<bool>(n,false));
+        vector<vector<bool>> visited(n, vector<bool>(n, false));
 
         for(int ij=0;ij<result[j].size();ij++)//조합 하나 뽑기
         {
