@@ -16,9 +16,8 @@ using namespace std;
 //n,k,m 순서대로 받음
 int n, k, m;
 vector<vector<int>> mmap;//돌 좌표 조합 저장
-vector<pair<int, int>> rock;//돌 위치 정보 저장
 
-void combination(int m, int index, vector<pair<int, int>>& current, vector<vector<pair<int, int>>>& result)
+void combination(int m, int index, vector<pair<int, int>>& current, vector<vector<pair<int, int>>>& result, vector<pair<int, int>> rock)//돌 위치 정보 저장)
 {
     if(current.size() == m)
     {
@@ -29,7 +28,7 @@ void combination(int m, int index, vector<pair<int, int>>& current, vector<vecto
     for(int i=index;i<rock.size();i++)
     {
         current.push_back(rock[i]);
-        combination(m,i+1, current, result);
+        combination(m,i+1, current, result,rock);
         current.pop_back();
     }
 }
@@ -45,6 +44,7 @@ int main() {
     // 여기에 코드를 작성해주세요.
     cin >>n>>k>>m;
     mmap.resize(n, vector<int>(n));
+    vector<pair<int, int>> rock;//돌 위치 정보 저장
 
     //맵정보 입력
     for(int i=0;i<n;i++)
@@ -60,7 +60,7 @@ int main() {
     //치울 돌을 추가해놓고 그중 m개를 골라 0으로 만들기
     vector<pair<int, int>> current;
     vector<vector<pair<int, int>>> result;
-    combination(m, 0, current, result);//조합 구하기
+    combination(m, 0, current, result, rock);//조합 구하기
 
     int dx[] = {0,1,0,-1}, dy[] = {1,0,-1,0};//동남서북
     //k개 시작점에서 이동해서 이동가능한 칸 구하기(BFS)
