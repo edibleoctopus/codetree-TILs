@@ -66,24 +66,28 @@ int main() {
     int dx[] = {0,1,0,-1}, dy[] = {1,0,-1,0};//동남서북
     //k개 시작점에서 이동해서 이동가능한 칸 구하기(BFS)
     int max_count = 0;
+
     for(int j=0;j<result.size();j++)
     {
         //돌 좌표(rock 중에) k개만큼 뽑고 맵에서 제거하기(조합)
         vector<vector<int>> temp = mmap;
+        visited.assign(n, vector<bool>(n,false));
 
         for(int ij=0;ij<result[j].size();ij++)//조합 하나 뽑기
         {
             int x = result[j][ij].first;
             int y = result[j][ij].second;
+
+            //cout<<ij<<" 돌 좌표 : "<<x<<' '<<y<<'\n';
+
             temp[x][y] = 0;//돌 제거하기
         }
+
         //BFS 진행
         int r, c;
         int num_count = 0;
-        
         for(int i=0;i<k;i++)
         {
-            visited.resize(n, vector<bool>(n,false));
             queue<pair<int, int>> q;
             cin >>r>>c;
             q.push({r-1,c-1});
@@ -91,8 +95,16 @@ int main() {
             {
                 int x = q.front().first; 
                 int y = q.front().second; 
+                if((!visited[x][y])) 
+                {
+                    //cout<<i<<" 좌표 : "<<x<<' '<<y<<'\n';
+                    visited[x][y] = true;
+                    num_count++;
+                }
+
                 q.pop();
-                for(int ij=0;ij<4;ij++)
+
+                for(int ij=0;ij<4;ij++)//상하 좌우 이동
                 {
                     int nx = x+dx[ij];
                     int ny = y+dy[ij];
@@ -101,9 +113,7 @@ int main() {
                     {
                         if((!temp[nx][ny])&&(!visited[nx][ny]))
                         {
-                            visited[nx][ny] = true;
                             q.push({nx,ny});
-                            num_count++;
                         }
                     }
                 }
