@@ -61,7 +61,8 @@ int main() {
     vector<pair<int, int>> current;
     vector<vector<pair<int, int>>> result;
     combination(m, 0, current, result, rock);//조합 구하기
-
+    current.clear(); 
+    
     int dx[] = {0,1,0,-1}, dy[] = {1,0,-1,0};//동남서북
     //k개 시작점에서 이동해서 이동가능한 칸 구하기(BFS)
     int max_count = 0;
