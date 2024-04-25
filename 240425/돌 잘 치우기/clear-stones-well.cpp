@@ -1,133 +1,151 @@
 #include <iostream>
+#include <vector>
 #include <queue>
+#define MAX_N 100
 
 using namespace std; 
 
-/*
+int n, k, m; //맵 크기, 시작점 개수, 치울 돌 수
+bool visited[MAX_N][MAX_N];//방문 여부
+vector<vector<int>> mmap;//맵 정보
+vector<pair<int, int>> rock;//돌이 있는 위치
+vector<pair<int, int>> select_rock;//치울 돌이 있는 위치
+queue<pair<int, int>> q;//BFS 진행용 큐
+vector<pair<int, int>> s_pos;//시작 포인트 저장
 
-숫자 0, 1로만 이루어진 n * n 격자가 주어졌을 때, 
-주어진 돌 중 m개의 돌만 적절하게 치워 k개의 시작점으로부터 상하좌우 인접한 곳으로만 이동하여
-도달 가능한 칸의 수를 최대로 하는 프로그램을 작성해보세요. 
-숫자 0은 해당 칸이 이동할 수 있는 곳임을, 숫자 1은 돌이 있어 해당 칸이 이동할 수 없는 곳임을 
-의미합니다.
-
-*/
-
-//n,k,m 순서대로 받음
-int n, k, m;
-vector<vector<int>> mmap;
-vector<pair<int, int>> current;//조합 하나 저장
-vector<vector<pair<int, int>>> result;//돌 좌표 조합 저장
-vector<pair<int, int>> rock;//돌 위치 정보 저장
-
-void combination(int m, int index)
-{
-    if(current.size() == m)
-    {
-        result.push_back(current);
-        return;
-    }
-
-    for(int i=index;i<rock.size();i++)
-    {
-        current.push_back(rock[i]);
-        combination(m,i+1);
-        current.pop_back();
-    }
-}
-
-bool InRange(int x, int y)
+bool InRange(int x, int y)//영역 안에 있는지 확인
 {
     return (x>=0 && y>=0 && x<n && y<n);
 }
 
-vector<vector<bool>> visited;
+bool CanGo(int x, int y) //영역 내에 있을 때도 갈 수 있는지 없는지 구분(방문 여부 + 돌인지아닌지)
+{
+    return ((!visited[x][y]) && (!mmap[x][y])); 
+}
 
-int main() {
-    // 여기에 코드를 작성해주세요.
-    cin >>n>>k>>m;
-    mmap.resize(n, vector<int>(n));
+void BFS() //BFS 진행(이동 가능한 최대 거리 구하기)
+{
+    while(!q.empty())
+    {
+        int dx[] = {0,1,0,-1}, dy[] = {1,0,-1,0}; //동남서북 순서
+        int x = q.front().first; 
+        int y = q.front().second;
 
-    //맵정보 입력
+        q.pop(); 
+
+        for(int i=0; i<4;i++)//동서 남북 이동
+        {
+            int nx = x+dx[i];
+            int ny = y+dy[i]; 
+
+            if(InRange(nx, ny))//영역 내에 있는지 확인
+            {
+                if(CanGo(nx, ny))//갈 수 있는지 없는지 확인
+                {
+                    visited[nx][ny] = true;//방문했다고 남기기
+                    q.push({nx, ny}); //큐에 추가하기
+                }
+            }
+        }
+    }
+}
+
+int calc()//선택한 돌 제거, 얼마나 이동가능한지 BFS 실행, 선택한 돌 다시 돌려놓기
+{
+    //visited 초기화
     for(int i=0;i<n;i++)
     {
         for(int j=0;j<n;j++)
         {
-            cin>>mmap[i][j];
-            if(mmap[i][j])//돌이면 좌표 저장
+            visited[i][j] = false;
+        }
+    }
+
+    //선택한 돌 제거
+    for(int i=0;i<m;i++)
+    {
+        int x = select_rock[i].first;
+        int y = select_rock[i].second;
+
+        mmap[x][y] = 0; //돌 제거
+    }
+
+
+    for(int i=0;i<k;i++)//큐에 시작점 넣기
+    {
+        q.push(s_pos[i]);
+        visited[s_pos[i].first][s_pos[i].second] = true; 
+    }
+
+    //BFS진행 
+    BFS(); 
+
+    //선택한 돌 다시 돌려놓기
+    for(int i=0;i<m;i++)
+    {
+        int x = select_rock[i].first;
+        int y = select_rock[i].second;
+
+        mmap[x][y] = 1; //돌 넣기
+    }
+
+    //방문 여부에서 참인 것 세기 
+    int ccount = 0;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(visited[i][j])
+                ccount++;
+        }
+    }
+    return ccount;
+}
+
+int ans = 0;
+void Find_max(int idx, int cnt) //백트래킹으로 제거할 돌 선택
+{
+    if(idx == rock.size())//모든 돌을 탐색했으면 탈출
+    {
+        if(cnt == m)//cnt와 치울 수 있는 돌의 개수 m과 같아지면 최대 이동 가능 경우인지 확인하기
+            ans = max(ans, calc()); 
+
+        return;
+    }
+
+    select_rock.push_back(rock[idx]);//돌 추가
+    Find_max(idx+1, cnt+1);//현재 돌 추가했다는 가정하에 탐색
+    select_rock.pop_back();//현재 돌 제거
+    Find_max(idx+1, cnt);//현재 돌 제외하고 탐색
+}
+
+int main()
+{
+    cin>>n>>k>>m; 
+    mmap.resize(n, vector<int>(n));
+
+    //맵 정보 입력
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            cin >> mmap[i][j];
+            if (mmap[i][j])
                 rock.push_back({i,j});
         }
     }
-    //0은 이동할 수 있는곳, 숫자 1은 돌이 있어 이동할 수 없는 곳.
-    //치울 돌을 추가해놓고 그중 m개를 골라 0으로 만들기
 
-    combination(m, 0);//조합 구하기
+    int r, c;
 
-    int dx[] = {0,1,0,-1}, dy[] = {1,0,-1,0};//동남서북
-    //k개 시작점에서 이동해서 이동가능한 칸 구하기(BFS)
-    int max_count = 0;
-
-    for(int j=0;j<result.size();j++)
+    for(int i=0;i<k;i++)
     {
-        //돌 좌표(rock 중에) k개만큼 뽑고 맵에서 제거하기(조합)
-        visited.assign(n, vector<bool>(n,false));
-
-        for(int ij=0;ij<result[j].size();ij++)//조합 하나 뽑기
-        {
-            int x = result[j][ij].first;
-            int y = result[j][ij].second;
-
-            mmap[x][y] = 0;//돌 제거하기
-        }
-
-        //BFS 진행
-        int r, c;
-        int num_count = 0;
-        for(int i=0;i<k;i++)
-        {
-            queue<pair<int, int>> q;
-            cin >>r>>c;
-            q.push({r-1,c-1});
-            while(!q.empty())
-            {
-                int x = q.front().first; 
-                int y = q.front().second; 
-                if((!visited[x][y])) 
-                {
-                    visited[x][y] = true;
-                    num_count++;
-                }
-
-                q.pop();
-
-                for(int ij=0;ij<4;ij++)//상하 좌우 이동
-                {
-                    int nx = x+dx[ij];
-                    int ny = y+dy[ij];
-
-                    if(InRange(nx, ny))
-                    {
-                        if((!mmap[nx][ny])&&(!visited[nx][ny]))
-                        {
-                            q.push({nx,ny});
-                        }
-                    }
-                }
-            }
-        }
-
-        for(int ij=0;ij<result[j].size();ij++)//조합 하나 뽑기
-        {
-            int x = result[j][ij].first;
-            int y = result[j][ij].second;
-
-            mmap[x][y] = 1;//돌 제거하기
-        }
-        
-        if(max_count<num_count)
-            max_count = num_count;
+        cin >> r>>c;
+        r--, c--; 
+        s_pos.push_back(make_pair(r,c));
     }
+    //최대 이동 가능한 경우 찾기(idx : 돌 위치 최대 크기, cnt : 치울 돌 개수)
+    Find_max(0,0);
 
-    cout<<max_count;
-    return 0;
+    cout<<ans;
+	return 0;
 }
