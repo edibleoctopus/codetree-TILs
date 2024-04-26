@@ -85,6 +85,7 @@ int BFS()
     }
     return c;
 }
+
 int ans = 0;
 void back(int idx, int cnt)
 {
@@ -107,6 +108,11 @@ void back(int idx, int cnt)
 
 int main() {
     // 여기에 코드를 작성해주세요.
+     //시간 초과 방지
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
     cin>>n>>k>>u>>d;
     //맵 정보 입력
     mmap.resize(n, vector<int>(n));
