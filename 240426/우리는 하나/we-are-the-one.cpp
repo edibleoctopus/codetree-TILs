@@ -19,7 +19,7 @@ k개의 도시를 적절하게 골라 갈 수 있는 서로 다른 도시의 수
 */
 
 vector<vector<int>> mmap; 
-vector<vector<bool>> visited;
+bool visited[9][9];
 
 int n, k, u, d;
 
@@ -88,7 +88,13 @@ void back(int idx, int cnt)
     {
         if(cnt == k)
         {
-            visited.assign(n, vector<bool> (n,false));
+            for(int i=0;i<9;i++)
+            {
+                for(int j=0;j<9;j++)
+                {
+                    visited[i][j] = false;
+                }
+            }
             int ccount = BFS();
             ans = max(ans, ccount);
         }
