@@ -30,9 +30,10 @@ bool InRange(int x, int y)
 
 bool Cango(int x, int y, int nx, int ny)
 {
+    int k = abs(mmap[nx][ny]-mmap[x][y]);
     if(InRange(nx,ny))
     {
-        if(abs(mmap[nx][ny]-mmap[x][y])>=u && abs(mmap[nx][ny]-mmap[x][y])<=d && !visited[nx][ny])//u이상 d이하 차이, 방문하지 않은 나라
+        if(k>=u && k <= d && !visited[nx][ny])//u이상 d이하 차이, 방문하지 않은 나라
         {
             return true;
         }
@@ -77,24 +78,27 @@ int BFS()
         }
        }
     }
-   
     return c;
 }
 
 int ans = 0;
+void Initvi()
+{
+     for(int i=0;i<9;i++)
+    {
+        for(int j=0;j<9;j++)
+        {
+            visited[i][j] = false;
+        }
+    }
+}
 void back(int idx, int cnt)
 {
     if(idx == mp.size())
     {
         if(cnt == k)
         {
-            for(int i=0;i<9;i++)
-            {
-                for(int j=0;j<9;j++)
-                {
-                    visited[i][j] = false;
-                }
-            }
+            Initvi();
             int ccount = BFS();
             ans = max(ans, ccount);
         }
