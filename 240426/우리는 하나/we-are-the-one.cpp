@@ -46,12 +46,14 @@ vector<pair<int, int>> mp;
 
 int BFS()
 {
+     int c=0;
     for(int i = 0; i<k;i++)
     {
         int x = selected_country[i].first; 
         int y = selected_country[i].second;
         q.push({x,y});
         visited[x][y] = true;
+        c++;
     }
 
     int dx[] = {0,1,0,-1}, dy[] = {1,0,-1,0};
@@ -70,19 +72,12 @@ int BFS()
         if(Cango(x,y,nx,ny))
         {
             visited[nx][ny] = true;
+            c++;
             q.push({nx, ny});
         }
        }
     }
-    int c=0;
-    for(int i=0; i<n;i++)
-    {
-        for(int j=0;j<n;j++)
-        {
-            if(visited[i][j])
-                c++;
-        }
-    }
+   
     return c;
 }
 
@@ -94,7 +89,6 @@ void back(int idx, int cnt)
         if(cnt == k)
         {
             visited.assign(n, vector<bool> (n,false));
-            
             int ccount = BFS();
             ans = max(ans, ccount);
         }
