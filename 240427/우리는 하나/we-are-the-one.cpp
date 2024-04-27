@@ -15,7 +15,6 @@ n*n 크기의 격자로 이루어져 있는 나라 정보
 경우에만 가능합니다. 
 
 k개의 도시를 적절하게 골라 갈 수 있는 서로 다른 도시의 수를 최대로 하는 프로그램을 작성해보세요. 
-
 */
 
 vector<vector<int>> mmap; 
@@ -78,6 +77,7 @@ int BFS()
         }
        }
     }
+
     return c;
 }
 
@@ -94,19 +94,21 @@ void Initvi()
 }
 void back(int idx, int cnt)
 {
+     if (cnt > k)
+            return;
+            
     if(idx == mp.size())
     {
-        if (cnt > k)
-            return;
-
         if(cnt == k)
         {
             Initvi();
             int ccount = BFS();
             ans = max(ans, ccount);
         }
+
         return;
     }
+
     selected_country.push_back(mp[idx]);
     back(idx+1, cnt+1);
     selected_country.pop_back(); 
