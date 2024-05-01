@@ -25,7 +25,8 @@ void BFS()
 {
     visited.assign(n, vector<bool>(m, false));//visited 초기화
     queue<pair<int, int>> q;
-    q.push({0,0});
+    q.push({0,0});//0,0에서 시작
+
     while(!q.empty())
     {
         int x = q.front().first, y = q.front().second;
@@ -52,12 +53,9 @@ bool meltornot(int i, int j)
         int nx = i+dx[k];
         int ny = j+dy[k];
 
-        if(InRange(nx, ny))
-        {
-            if(visited[nx][ny])//방문한 물이 있으면,
-            {
-                return true;//녹이기
-            }
+        if(InRange(nx, ny) && visited[nx][ny])
+        {        
+            return true;//녹이기     
         }
     }
     return false;//없으면 냅두기
