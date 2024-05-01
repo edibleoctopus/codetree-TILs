@@ -6,8 +6,12 @@ using namespace std;
 //1로 가로막혀있으면(못녹이는 물)visited를 못한다.
 //가로막혀있지 않은 물을 찾는 방식으로 풀기
 int n, m;
-vector<vector<int>> mmap;//맵 정보 저장
 bool visited[200][200];//방문 여부 저장(녹이는 물을 저장할 것.)
+int last_count_g;
+int t = 0;
+int dx[] = { 0,1,0,-1 }, dy[] = { 1,0,-1,0 };//동남서북
+vector<vector<int>> mmap;//맵 정보 저장
+queue<pair<int, int>> q;
 
 bool InRange(int x, int y)//영역 내에 있는지 확인
 {
@@ -19,8 +23,7 @@ bool Cango(int x, int y)
     return (InRange(x, y) && !mmap[x][y] && !visited[x][y]);//영역안에 있고, 방문하지 않았으며, 1이아니면(빙하)
 }
 
-int t = 0;
-int dx[] = { 0,1,0,-1 }, dy[] = { 1,0,-1,0 };//동남서북
+
 
 void BFS()
 {
@@ -32,7 +35,7 @@ void BFS()
             visited[i][j] = false; 
         }
     }
-    queue<pair<int, int>> q;
+
     q.push({ 0,0 });
     while (!q.empty())
     {
@@ -70,8 +73,6 @@ bool meltornot(int i, int j)
     }
     return false;//없으면 냅두기
 }
-
-int last_count_g = 0;
 
 void melt()
 {
