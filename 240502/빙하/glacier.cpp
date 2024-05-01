@@ -75,7 +75,7 @@ bool meltornot(int x, int y)
     return false;//없으면 냅두기
 }
 
-int last_count_g=0;
+int last_count_g;
 
 void melt()
 {
@@ -94,29 +94,31 @@ void melt()
     }
 }
 
-bool exist_g()
-{
-    for(int i=0;i<n;i++)
-    {
-        for(int j=0;j<n;j++)
-        {
-            if(mmap[i][j])//얼음이 있으면 계속
-            {
-                return true;
-            }
-        }
-    }
-    return false;//없으면 그만
-}
-
 void Simulate() {
     t++;
     last_count_g = 0;
 
     //녹이는 물 확인하기(0,0에서 시작 )->BFS로 visited 채우기
     BFS();
+
     //녹이기(visited 물 근처에 빙하가 있으면 녹이기)
     melt();
+
+}
+
+bool exist_g()
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if (mmap[i][j])//얼음이 있으면 계속
+            {
+                return true;
+            }
+        }
+    }
+    return false;//없으면 그만
 
 }
 int main()
