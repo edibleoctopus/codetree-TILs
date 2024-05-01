@@ -23,7 +23,13 @@ int dx[] = {0,1,0,-1}, dy[] = {1,0,-1,0};//동남서북
 
 void BFS()
 {
-    visited.assign(n, vector<bool>(m, false));//visited 초기화
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            visited[i][j] = false;
+        }
+    }
     queue<pair<int, int>> q;
     q.push({0,0});//0,0에서 시작
 
@@ -58,6 +64,7 @@ bool meltornot(int i, int j)
             return true;//녹이기     
         }
     }
+    
     return false;//없으면 냅두기
 }
 
@@ -100,6 +107,8 @@ int main()
 {
     cin>>n>>m;
     mmap.resize(n, vector<int>(m));
+    visited.resize(n, vector<bool>(m, false));//visited 초기화
+
     //맵 정보 입력
     for(int i=0;i<n;i++)
     {
