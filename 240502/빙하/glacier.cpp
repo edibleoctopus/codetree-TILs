@@ -42,7 +42,8 @@ void BFS()
 
     while(!q.empty())
     {
-        int x = q.front().first, y = q.front().second;
+        pair<int, int> cc = q.front();
+        int x = cc.first, y = cc.second;
         q.pop();
 
         for(int i=0;i<4;i++)
@@ -79,7 +80,6 @@ int last_count_g=0;
 
 void melt()
 {
-    last_count_g = 0; 
 
     for(int i=0;i<n;i++)
     {
@@ -110,6 +110,16 @@ bool exist_g()
     return false;//없으면 그만
 }
 
+void Simulate() {
+    t++;
+    last_count_g = 0;
+
+    //녹이는 물 확인하기(0,0에서 시작 )->BFS로 visited 채우기
+    BFS();
+    //녹이기(visited 물 근처에 빙하가 있으면 녹이기)
+    melt();
+
+}
 int main()
 {
     cin>>n>>m;
@@ -126,12 +136,7 @@ int main()
     }
     
     do{
-        t++;
-        //녹이는 물 확인하기(0,0에서 시작 )->BFS로 visited 채우기
-        BFS();
-        //녹이기(visited 물 근처에 빙하가 있으면 녹이기)
-        melt();
-
+        Simulate();
     }while(exist_g());  //빙하가 다 녹았는지 확인하기
 
     //다 녹이는데 몇 초 걸렸고, 마지막에 몇 개 녹였는지 출력하기
