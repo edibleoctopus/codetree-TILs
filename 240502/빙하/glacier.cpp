@@ -1,11 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-
-#define DIR_NUM 4
-#define MAX_N 200
-#define MAX_M 200
-
 using namespace std; 
 
 //1로 가로막혀있으면(못녹이는 물)visited를 못한다.
@@ -14,10 +9,9 @@ int n, m;
 int t = 0;
 int dx[] = { 0,1,0,-1 }, dy[] = { 1,0,-1,0 };//동남서북
 
-int mmap[MAX_N][MAX_M];//맵 정보 저장
-bool visited[MAX_N][MAX_M];
+vector<vector<int>> mmap;//맵 정보 저장
+bool visited[200][200];
 queue<pair<int, int>> q;
-int last_count_g;
 
 bool InRange(int x, int y)//영역 내에 있는지 확인
 {
@@ -42,10 +36,9 @@ void Init()
 
 void BFS()
 {
-    Init();
-
     q.push({0,0});//0,0에서 시작
     visited[0][0] = true;
+    Init();
 
     while(!q.empty())
     {
@@ -53,7 +46,7 @@ void BFS()
         int x = cc.first, y = cc.second;
         q.pop();
 
-        for(int i=0;i< DIR_NUM;i++)
+        for(int i=0;i<4;i++)
         {
             int nx = x+dx[i];
             int ny = y+dy[i];
@@ -69,9 +62,10 @@ void BFS()
 
 bool meltornot(int x, int y)
 {
-    for(int k=0;k< DIR_NUM;k++)
+    for(int k=0;k<4;k++)
     {
-        int nx = x+dx[k], ny = y + dy[k];
+        int nx = x+dx[k];
+        int ny = y+dy[k];
 
         if(InRange(nx, ny) && visited[nx][ny])
         {        
@@ -81,6 +75,7 @@ bool meltornot(int x, int y)
     return false;//없으면 냅두기
 }
 
+int last_count_g=0;
 
 void melt()
 {
@@ -127,6 +122,7 @@ void Simulate() {
 int main()
 {
     cin>>n>>m;
+    mmap.resize(n, vector<int>(m));
 
     //맵 정보 입력
     for(int i=0;i<n;i++)
