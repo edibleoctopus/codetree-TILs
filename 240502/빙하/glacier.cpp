@@ -22,7 +22,7 @@ void Init()
 {
     for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j < m; j++)
         {
             visited[i][j] = false;
         }
@@ -121,12 +121,11 @@ int main()
     }
     
     do{
-
+        t++;
         //녹이는 물 확인하기(0,0에서 시작 )->BFS로 visited 채우기
         BFS();
         //녹이기(visited 물 근처에 빙하가 있으면 녹이기)
         melt();
-        t++;
 
     }while(exist_g());  //빙하가 다 녹았는지 확인하기
 
