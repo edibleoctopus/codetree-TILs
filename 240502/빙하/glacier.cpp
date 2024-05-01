@@ -37,10 +37,11 @@ void BFS()
     }
 
     q.push({ 0,0 });
+    visited[0][0] = true;
+
     while (!q.empty())
     {
         int x = q.front().first, y = q.front().second;
-        visited[x][y] = true;
         q.pop();
 
         for (int i = 0; i < 4; i++)
@@ -51,6 +52,8 @@ void BFS()
             if (Cango(nx, ny))
             {
                 q.push({ nx,ny });
+                visited[x][y] = true;
+
             }
         }
     }
