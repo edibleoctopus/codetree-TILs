@@ -36,9 +36,9 @@ void Init()
 
 void BFS()
 {
+    Init();
     q.push({0,0});//0,0에서 시작
     visited[0][0] = true;
-    Init();
 
     while(!q.empty())
     {
