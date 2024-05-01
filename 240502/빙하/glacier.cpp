@@ -52,7 +52,7 @@ void BFS()
             if (Cango(nx, ny))
             {
                 q.push({ nx,ny });
-                visited[x][y] = true;
+                visited[nx][ny] = true;
 
             }
         }
