@@ -7,7 +7,7 @@ using namespace std;
 //가로막혀있지 않은 물을 찾는 방식으로 풀기
 int n, m;
 vector<vector<int>> mmap;//맵 정보 저장
-vector<vector<bool>> visited;//방문 여부 저장(녹이는 물을 저장할 것.)
+bool visited[200][200];//방문 여부 저장(녹이는 물을 저장할 것.)
 
 bool InRange(int x, int y)//영역 내에 있는지 확인
 {
@@ -29,13 +29,11 @@ void BFS()
     {
         for (int j = 0; j < m; j++)
         {
-            visited[i][j] = false;
+            visited[i][j] = false; 
         }
     }
-
     queue<pair<int, int>> q;
     q.push({ 0,0 });
-
     while (!q.empty())
     {
         int x = q.front().first, y = q.front().second;
@@ -73,7 +71,7 @@ bool meltornot(int i, int j)
     return false;//없으면 냅두기
 }
 
-int last_count_g;
+int last_count_g = 0;
 
 void melt()
 {
