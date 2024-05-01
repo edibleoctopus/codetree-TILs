@@ -6,8 +6,12 @@ using namespace std;
 //1로 가로막혀있으면(못녹이는 물)visited를 못한다.
 //가로막혀있지 않은 물을 찾는 방식으로 풀기
 int n, m;
+int t = 0;
+int dx[] = { 0,1,0,-1 }, dy[] = { 1,0,-1,0 };//동남서북
+
 vector<vector<int>> mmap;//맵 정보 저장
 vector<vector<bool>> visited;//방문 여부 저장(녹이는 물을 저장할 것.)
+
 bool InRange(int x, int y)//영역 내에 있는지 확인
 {
     return (x>=0 && y>=0 && x<n && y<m);
@@ -24,12 +28,10 @@ void Init()
     {
         for (int j = 0; j < m; j++)
         {
-            visited[i][j] = false;
+            visited[i][j] = 0;
         }
     }
 }
-int t=0;
-int dx[] = {0,1,0,-1}, dy[] = {1,0,-1,0};//동남서북
 
 void BFS()
 {
