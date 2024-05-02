@@ -56,6 +56,12 @@ int main() {
     visited.resize(n, vector<bool>(n, false));
     vt.resize(n,vector<int>(n, 0));
     cin>>r1>>c1>>r2>>c2;
+    if(r1==r2 && c1==c2)
+    {
+        cout<<0;
+        return 0;
+    }
+    
     BFS(r1-1, c1-1);
 
     if(!vt[r2-1][c2-1])
